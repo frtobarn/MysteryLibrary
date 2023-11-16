@@ -1,28 +1,41 @@
 """
 Mistery library
+"a ghost tale"...
 """
 """
 authors:
-Fabian Ricardo Tobar Numesqui
+Fabian Ricardo Tobar Numesqui(frtobarn@unal.edu.co)
 Maria Camila Diaz Guevara
 """
 
 # Importing arcade library
 import arcade
-from math import sqrt
 
-# from typing import Optional, Tuple
-# import pyglet
+# Importing os library
+import os
 
 
-# Class to setup my custom window
+# Importing classes
+from player import Player
+from ghost import Ghost
+from map import Map
+from clue import Clue
+
+# from math import sqrt # may be i need it later ;)
+
+# Getting absolute path because im into a linux virtual environment
+PATH = os.path.dirname(os.path.abspath(__file__)) + "/"
+
+
+# Main class
 class MyGameWindow(arcade.Window):
     def __init__(
         self,
-        width: int = 800,
-        height: int = 600,
-        title: str | None = "Ghost Library",
-        fullscreen: bool = False,
+        width: int = 1280,
+        height: int = 720,
+        title: str | None = "Mistery Library",
+        fullscreen: bool = True,
+        update_rate: float | None = 1 / 30,
     ):
         """,
         resizable: bool = True,
@@ -37,7 +50,7 @@ class MyGameWindow(arcade.Window):
         center_window: bool = False,
         samples: int = 4,
         enable_polling: bool = True,"""
-        super().__init__(width, height, title, fullscreen)
+        super().__init__(width, height, title, fullscreen, update_rate)
         """,
         resizable,
         update_rate,
@@ -55,50 +68,24 @@ class MyGameWindow(arcade.Window):
         # Setting up window location
         self.set_location(0, 0)
         arcade.set_background_color(arcade.color.BLUE_GRAY)
+
         # print(arcade.get_projection())
 
-        # Animated sprites
-        self.player_list = None
-        self.player = None
+        # creating a level or map
+        self.map_1 = Map("map_01")
 
-        # Introducing a sprite
-        self.player_sprite = arcade.Sprite(
-            "misteryLibrary/sprites/character.png",
-            center_x=100,
-            center_y=100,
-        )
-        self.coin_sprite = arcade.Sprite(
-            "misteryLibrary/sprites/coin_01.png",
-            center_x=200,
-            center_y=200,
-        )
-        self.box_sprite = arcade.Sprite(
-            "misteryLibrary/sprites/boxCrate_double.png",
-            center_x=300,
-            center_y=300,
-        )
+        # Creating a player and some ghosts
+        self.player = Player("Player", 1280 / 2, 720 / 2, 100, "")
+        self.ghost_1 = Ghost("ghost_1", 100, 100, 1, "", "", "")
+
+        # Creating clues
+        self.clue_1 = Clue("clue_1", 900, 600, "")
+        self.clue_2 = Clue("clue_2", 300, 300, "")
 
         # Using spritelist
-        self.sprite_list = arcade.SpriteList()
-        self.sprite_list.append(self.player_sprite)
-        self.sprite_list.append(self.coin_sprite)
-        self.sprite_list.append(self.box_sprite)
-
-        # Position vars for Player
-        self.player_x = 150
-        self.player_y = 50
-        self.player_ang = 0
-
-        # Speed vasr for Player
-        self.player_x_speed = 100
-        self.player_y_speed = 100
-        self.player_ang_speed = 0
-
-        # Booleans for player's movement
-        self.go_right = False
-        self.go_left = False
-        self.go_up = False
-        self.go_down = False
+        self.clue_list = arcade.SpriteList()
+        self.clue_list.append(self.clue_1.clue_sprite)
+        self.clue_list.append(self.clue_2.clue_sprite)
 
         # Position var for circle
         self.c_x = 150
@@ -133,111 +120,27 @@ class MyGameWindow(arcade.Window):
         self.co_y_speed = 0
 
         # Run animated sprite setup function
-        self.setup()
-
-    #
-    def setup(self):
-        self.player_list = arcade.SpriteList()
-        self.player = arcade.AnimatedWalkingSprite()
-
-        self.player.stand_right_textures = []
-        self.player.stand_right_textures.append(
-            arcade.load_texture("misteryLibrary/sprites/basicWalk/tile000.png")
-        )
-
-        self.player.stand_left_textures = []
-        self.player.stand_left_textures.append(
-            arcade.load_texture(
-                "misteryLibrary/sprites/basicWalk/tile000.png", mirrored=True
-            )
-        )
-
-        # walk to right sprites
-        self.player.walk_right_textures = []
-        self.player.walk_right_textures.append(
-            arcade.load_texture("misteryLibrary/sprites/basicWalk/tile000.png")
-        )
-        self.player.walk_right_textures.append(
-            arcade.load_texture("misteryLibrary/sprites/basicWalk/tile001.png")
-        )
-        self.player.walk_right_textures.append(
-            arcade.load_texture("misteryLibrary/sprites/basicWalk/tile002.png")
-        )
-        self.player.walk_right_textures.append(
-            arcade.load_texture("misteryLibrary/sprites/basicWalk/tile003.png")
-        )
-        self.player.walk_right_textures.append(
-            arcade.load_texture("misteryLibrary/sprites/basicWalk/tile004.png")
-        )
-        self.player.walk_right_textures.append(
-            arcade.load_texture("misteryLibrary/sprites/basicWalk/tile005.png")
-        )
-        self.player.walk_right_textures.append(
-            arcade.load_texture("misteryLibrary/sprites/basicWalk/tile006.png")
-        )
-        self.player.walk_right_textures.append(
-            arcade.load_texture("misteryLibrary/sprites/basicWalk/tile007.png")
-        )
-
-        # walk to left sprites
-        self.player.walk_left_textures = []
-        self.player.walk_left_textures.append(
-            arcade.load_texture(
-                "misteryLibrary/sprites/basicWalk/tile000.png", mirrored=True
-            )
-        )
-        self.player.walk_left_textures.append(
-            arcade.load_texture(
-                "misteryLibrary/sprites/basicWalk/tile001.png", mirrored=True
-            )
-        )
-        self.player.walk_left_textures.append(
-            arcade.load_texture(
-                "misteryLibrary/sprites/basicWalk/tile002.png", mirrored=True
-            )
-        )
-        self.player.walk_left_textures.append(
-            arcade.load_texture(
-                "misteryLibrary/sprites/basicWalk/tile003.png", mirrored=True
-            )
-        )
-        self.player.walk_left_textures.append(
-            arcade.load_texture(
-                "misteryLibrary/sprites/basicWalk/tile004.png", mirrored=True
-            )
-        )
-        self.player.walk_left_textures.append(
-            arcade.load_texture(
-                "misteryLibrary/sprites/basicWalk/tile005.png", mirrored=True
-            )
-        )
-        self.player.walk_left_textures.append(
-            arcade.load_texture(
-                "misteryLibrary/sprites/basicWalk/tile006.png", mirrored=True
-            )
-        )
-        self.player.walk_left_textures.append(
-            arcade.load_texture(
-                "misteryLibrary/sprites/basicWalk/tile007.png", mirrored=True
-            )
-        )
-
-        self.player.scale = 0.5
-        self.player.center_x = 1280 // 2
-        self.player.center_y = 720 // 2
-
-        self.player_list.append(self.player)
+        # self.setup()
 
     # called once a frame to render the window
     def on_draw(self):
+        """Render the screen."""
+
+        # Clear the screen to the background color
+        self.clear()
+
         # Gets the setup to render
         arcade.start_render()
 
-        # Drawing animated sprite
-        self.player_list.draw()
+        # Drawing tiled map
+        self.map_1.draw()
+
+        # Drawing player's  and ghost's animated sprite
+        self.player.draw()
+        self.ghost_1.draw()
 
         # Drawing a sprite
-        self.sprite_list.draw()
+        self.clue_list.draw()
         """
         self.player_sprite.draw()
         self.coin_sprite.draw()
@@ -280,28 +183,17 @@ class MyGameWindow(arcade.Window):
             self.c_y_speed *= -1
             self.c_ang_speed *= -1
 
-        # Detecting inputs for player
-        if self.go_right:
-            # self.player_x += self.player_x_speed * delta_time
-            self.player_sprite.turn_right(2)
-        if self.go_left:
-            # self.player_x -= self.player_x_speed * delta_time
-            self.player_sprite.turn_left(2)
-        if self.go_up:
-            # self.player_y += self.player_y_speed * delta_time
-            # self.player_sprite.strafe(0.1)
-            pass
-        if self.go_down:
-            # self.player_y -= self.player_y_speed * delta_time
-            pass
+        # Executing movement-inputs for player
+        self.player.move()
+
+        self.ghost_1.update()
 
         # self.player_sprite.set_position(self.player_x, self.player_y)
         # self.player_sprite.update()
-        self.sprite_list.update()
+        self.clue_list.update()
 
-        # update animated sprite list
-        self.player_list.update()
-        self.player_list.update_animation()
+        # update plater's animated sprite list
+        self.player.update()
 
         # Detenting inputs for rectangle
         if self.rectangle_right:
@@ -328,14 +220,7 @@ class MyGameWindow(arcade.Window):
             self.go_down = True"""
 
         # inputs for player
-        if symbol == arcade.key.D:
-            self.player.change_x = 5
-        if symbol == arcade.key.A:
-            self.player.change_x = -5
-        if symbol == arcade.key.W:
-            self.player.change_y = 5
-        if symbol == arcade.key.S:
-            self.player.change_y = -5
+        self.player.on_key_press(symbol, modifiers)
 
         # inputs for rectangle
         if symbol == arcade.key.RIGHT:
@@ -360,10 +245,7 @@ class MyGameWindow(arcade.Window):
             self.go_down = False"""
 
         # Inputs for player
-        if symbol == arcade.key.A or symbol == arcade.key.D:
-            self.player.change_x = 0
-        if symbol == arcade.key.W or symbol == arcade.key.S:
-            self.player.change_y = 0
+        self.player.on_key_release(symbol, modifiers)
 
         # inputs for rectangle
         if symbol == arcade.key.RIGHT:
@@ -401,8 +283,6 @@ class MyGameWindow(arcade.Window):
         if distance > 1:
             self.co_x += co_x_dist * 0.1
             self.co_y += co_y_dist * 0.1
-
-    #
 
 
 # Creating my window
