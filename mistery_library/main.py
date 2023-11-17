@@ -19,20 +19,22 @@ import os
 from player import Player
 from ghost import Ghost
 from map import Map
-from clue import Clue
+from light import Light
 
 # from math import sqrt # may be i need it later ;)
 
 # Getting absolute path because im into a linux virtual environment
 PATH = os.path.dirname(os.path.abspath(__file__)) + "/"
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
 
 
 # Main class
 class MyGameWindow(arcade.Window):
     def __init__(
         self,
-        width: int = 1280,
-        height: int = 720,
+        width: int = SCREEN_WIDTH,
+        height: int = SCREEN_HEIGHT,
         title: str | None = "Mistery Library",
         fullscreen: bool = True,
         update_rate: float | None = 1 / 30,
@@ -75,17 +77,8 @@ class MyGameWindow(arcade.Window):
         self.map_1 = Map("map_01")
 
         # Creating a player and some ghosts
-        self.player = Player("Player", 1280 / 2, 720 / 2, 100, "")
+        self.player = Player("Player", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 100, "")
         self.ghost_1 = Ghost("ghost_1", 100, 100, 1, "", "", "")
-
-        # Creating clues
-        self.clue_1 = Clue("clue_1", 900, 600, "")
-        self.clue_2 = Clue("clue_2", 300, 300, "")
-
-        # Using spritelist
-        self.clue_list = arcade.SpriteList()
-        self.clue_list.append(self.clue_1.clue_sprite)
-        self.clue_list.append(self.clue_2.clue_sprite)
 
         # Position var for circle
         self.c_x = 150
@@ -96,31 +89,6 @@ class MyGameWindow(arcade.Window):
         self.c_x_speed = 300
         self.c_y_speed = 100
         self.c_ang_speed = 0
-
-        # Position var for rectangle
-        self.rectangle_x = 150
-        self.rectangle_y = 50
-        self.rectangle_ang = 0
-
-        # Speed vasr for rectangle
-        self.rectangle_x_speed = 100
-        self.rectangle_y_speed = 100
-        self.rectangle_ang_speed = 0
-
-        # Booleans for rectangle's movement
-        self.rectangle_right = False
-        self.rectangle_left = False
-        self.rectangle_up = False
-        self.rectangle_down = False
-
-        # Custom cursor
-        self.co_x = 150
-        self.co_y = 50
-        self.co_x_speed = 0
-        self.co_y_speed = 0
-
-        # Run animated sprite setup function
-        # self.setup()
 
     # called once a frame to render the window
     def on_draw(self):
@@ -139,37 +107,16 @@ class MyGameWindow(arcade.Window):
         self.player.draw()
         self.ghost_1.draw()
 
-        # Drawing a sprite
-        self.clue_list.draw()
-        """
-        self.player_sprite.draw()
-        self.coin_sprite.draw()
-        self.box_sprite.draw()
-        """
-
         # Drawing examples
         arcade.draw_lines([(0, 0), (100, 100)], arcade.color.ALABAMA_CRIMSON, 4)
         arcade.draw_point(105, 105, arcade.color.WINDSOR_TAN, 10)
+
         arcade.draw_circle_filled(
             self.c_x, self.c_y, 25, arcade.color.AMARANTH, self.c_ang, 10
         )
-        arcade.draw_circle_outline(
-            self.co_x, self.co_y, 30, arcade.color.APRICOT, 3, 0, 10
-        )
-        arcade.draw_lrtb_rectangle_filled(
-            self.rectangle_x,
-            self.rectangle_x + 100,
-            self.rectangle_y + 50,
-            self.rectangle_y,
-            arcade.color.AMAZON,
-        )
 
-        # return super().on_draw()
-
+    # On_update function(called every frame)
     def on_update(self, delta_time: float):
-        # Moving cursor through mouse
-        self.move_cursor()
-
         # Moving the filled circle
         self.c_x += self.c_x_speed * delta_time
         self.c_y += self.c_y_speed * delta_time
@@ -190,72 +137,18 @@ class MyGameWindow(arcade.Window):
 
         # self.player_sprite.set_position(self.player_x, self.player_y)
         # self.player_sprite.update()
-        self.clue_list.update()
 
         # update plater's animated sprite list
         self.player.update()
 
-        # Detenting inputs for rectangle
-        if self.rectangle_right:
-            self.rectangle_x += self.rectangle_x_speed * delta_time
-        if self.rectangle_left:
-            self.rectangle_x -= self.rectangle_x_speed * delta_time
-        if self.rectangle_up:
-            self.rectangle_y += self.rectangle_y_speed * delta_time
-        if self.rectangle_down:
-            self.rectangle_y -= self.rectangle_y_speed * delta_time
-
     # Setting up input keys
     def on_key_press(self, symbol: int, modifiers: int):
         # inputs for player
-        """
-        if symbol == arcade.key.D:
-            self.go_right = True
-        if symbol == arcade.key.A:
-            self.go_left = True
-        if symbol == arcade.key.W:
-            self.player_sprite.strafe(1)
-            self.go_up = True
-        if symbol == arcade.key.S:
-            self.go_down = True"""
-
-        # inputs for player
         self.player.on_key_press(symbol, modifiers)
-
-        # inputs for rectangle
-        if symbol == arcade.key.RIGHT:
-            self.rectangle_right = True
-        if symbol == arcade.key.LEFT:
-            self.rectangle_left = True
-        if symbol == arcade.key.UP:
-            self.rectangle_up = True
-        if symbol == arcade.key.DOWN:
-            self.rectangle_down = True
 
     def on_key_release(self, symbol: int, modifiers: int):
         # Inputs for player
-        """
-        if symbol == arcade.key.D:
-            self.go_right = False
-        if symbol == arcade.key.A:
-            self.go_left = False
-        if symbol == arcade.key.W:
-            self.go_up = False
-        if symbol == arcade.key.S:
-            self.go_down = False"""
-
-        # Inputs for player
         self.player.on_key_release(symbol, modifiers)
-
-        # inputs for rectangle
-        if symbol == arcade.key.RIGHT:
-            self.rectangle_right = False
-        if symbol == arcade.key.LEFT:
-            self.rectangle_left = False
-        if symbol == arcade.key.UP:
-            self.rectangle_up = False
-        if symbol == arcade.key.DOWN:
-            self.rectangle_down = False
 
     # Setting up mouse follow
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
@@ -266,23 +159,13 @@ class MyGameWindow(arcade.Window):
             self.c_y_speed *= -1
 
         if button == arcade.MOUSE_BUTTON_RIGHT:
-            self.rectangle_x = x
-            self.rectangle_y = y
+            # self.rectangle_x = x
+            # self.rectangle_y = y
+            pass
 
+    # Getting inputs from mouse
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
-        self.co_x_speed = x
-        self.co_y_speed = y
-
-    def move_cursor(self):
-        co_x_dist = self.co_x_speed - self.co_x
-        co_y_dist = self.co_y_speed - self.co_y
-
-        # distance = sqrt(co_x_dist * co_x_dist + co_y_dist * co_y_dist)#not optimized
-        distance = pow(co_x_dist * co_x_dist + co_y_dist * co_y_dist, 0.5)
-
-        if distance > 1:
-            self.co_x += co_x_dist * 0.1
-            self.co_y += co_y_dist * 0.1
+        self.player.on_mouse_motion(x, y)
 
 
 # Creating my window

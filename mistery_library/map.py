@@ -1,6 +1,9 @@
 import arcade
 import os
 
+# importing classes
+from clue import Clue
+
 
 class Map:
     def __init__(self, name):
@@ -9,8 +12,19 @@ class Map:
         self.tiled_map = None
         self.scene = None
 
+        # Creating clues
+        self.clue_1 = Clue("clue_1", 900, 600, "")
+        self.clue_2 = Clue("clue_2", 300, 300, "")
+
+        # Using a spritelist to store clues
+        self.clue_list = arcade.SpriteList()
+        self.clue_list.append(self.clue_1.clue_sprite)
+        self.clue_list.append(self.clue_2.clue_sprite)
+
+        # setup tiled_map function
         self.setup()
 
+    # setup tiled_map function
     def setup(self):
         tiledmap_filepath = (
             os.path.dirname(os.path.abspath(__file__)) + "/maps/my-map.tmx"
@@ -33,5 +47,9 @@ class Map:
         # Drawing our Scene
         self.scene.draw()
 
+        # Drawing clues spritelist
+        self.clue_list.draw()
+
     def update(self):
-        pass
+        # Updating clues spritelist
+        self.clue_list.update()

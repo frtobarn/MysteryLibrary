@@ -5,6 +5,8 @@ from light import Light
 
 # Getting absolute path because im into a virtual environment
 PATH = os.path.dirname(os.path.abspath(__file__)) + "/"
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
 
 
 class Player(Character):
@@ -27,8 +29,10 @@ class Player(Character):
         self.go_down = False
 
         # Light from cellphone
-        self.light = Light("Cellphone light", pos_x, pos_y, 100, 100)
-        self.player_ang_speed = 0
+        # Creating light
+        self.light = Light(
+            "Cellphone light", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 10, 100
+        )
 
         # Animated sprites
         self.player_list = None
@@ -119,10 +123,16 @@ class Player(Character):
         # Drawing player's animated sprite
         self.player_list.draw()
 
+        # Drawing player's light
+        self.light.draw()
+
     def update(self):
         # update plater's animated sprite list
         self.player_list.update()
         self.player_list.update_animation()
+
+        # Moving light using mouse's movements
+        self.light.update()
 
     def move(self):
         # Detecting inputs for player
@@ -157,6 +167,10 @@ class Player(Character):
             self.player.change_x = 0
         if symbol == arcade.key.W or symbol == arcade.key.S:
             self.player.change_y = 0
+
+    # Getting inputs from mouse
+    def on_mouse_motion(self, x, y):
+        self.light.on_mouse_motion(x, y)
 
     def turn_on_light(self):
         self.light.turn_on()
