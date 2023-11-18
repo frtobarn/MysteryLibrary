@@ -2,6 +2,11 @@ import arcade
 import os
 from character import Character
 
+# Getting absolute path because im into a linux virtual environment
+PATH = os.path.dirname(os.path.abspath(__file__)) + "/"
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
+
 
 class Ghost(Character):
     def __init__(
@@ -18,18 +23,12 @@ class Ghost(Character):
         self.setup()
 
     def setup(self):
-        # First set the playerlist and player vars
+        # Setting up character sprite
         self.ghost_list = arcade.SpriteList()
         self.ghost = arcade.AnimatedTimeBasedSprite()
 
-        # changed from AnimatedTimeSprite
-        # self.player.textures = []
-
         # Getting abslute path for my resources
-        sprite_filepath = (
-            os.path.dirname(os.path.abspath(__file__)) + "/sprites/walk-basic.png"
-        )
-        # print(sprite_filepath)
+        sprite_filepath = PATH + "sprites/walk-basic.png"
 
         """for i in range(9):
             texture = arcade.load_texture(

@@ -5,6 +5,9 @@ import os
 from clue import Clue
 
 
+PATH = os.path.dirname(os.path.abspath(__file__)) + "/"
+
+
 class Map:
     def __init__(self, name):
         # Member variables
@@ -26,9 +29,7 @@ class Map:
 
     # setup tiled_map function
     def setup(self):
-        tiledmap_filepath = (
-            os.path.dirname(os.path.abspath(__file__)) + "/maps/my-map.tmx"
-        )
+        tiledmap_filepath = PATH + "maps/my-map.tmx"
 
         layer_options = {
             "Terrain": {

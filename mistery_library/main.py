@@ -4,8 +4,8 @@ Mistery library
 """
 """
 authors:
-Fabian Ricardo Tobar Numesqui(frtobarn@unal.edu.co)
-Maria Camila Diaz Guevara
+code: Fabian Ricardo Tobar Numesqui(frtobarn@unal.edu.co)
+art: Maria Camila Diaz Guevara
 """
 
 # Importing arcade library
@@ -39,7 +39,9 @@ class MyGameWindow(arcade.Window):
         fullscreen: bool = True,
         update_rate: float | None = 1 / 30,
     ):
-        """,
+        super().__init__(width, height, title, fullscreen, update_rate)
+        """
+        === Other options ===
         resizable: bool = True,
         update_rate: float | None = 1 / 60,
         antialiasing: bool = True,
@@ -52,20 +54,6 @@ class MyGameWindow(arcade.Window):
         center_window: bool = False,
         samples: int = 4,
         enable_polling: bool = True,"""
-        super().__init__(width, height, title, fullscreen, update_rate)
-        """,
-        resizable,
-        update_rate,
-        antialiasing,
-        gl_version,
-        screen,
-        style,
-        visible,
-        vsync,
-        gc_mode,
-        center_window,
-        samples,
-        enable_polling,"""
 
         # Setting up window location
         self.set_location(0, 0)
@@ -94,7 +82,7 @@ class MyGameWindow(arcade.Window):
     def on_draw(self):
         """Render the screen."""
 
-        # Clear the screen to the background color
+        # Clear the screen to load the background color
         self.clear()
 
         # Gets the setup to render
@@ -108,8 +96,6 @@ class MyGameWindow(arcade.Window):
         self.ghost_1.draw()
 
         # Drawing examples
-        arcade.draw_lines([(0, 0), (100, 100)], arcade.color.ALABAMA_CRIMSON, 4)
-        arcade.draw_point(105, 105, arcade.color.WINDSOR_TAN, 10)
 
         arcade.draw_circle_filled(
             self.c_x, self.c_y, 25, arcade.color.AMARANTH, self.c_ang, 10
@@ -151,6 +137,11 @@ class MyGameWindow(arcade.Window):
         self.player.on_key_release(symbol, modifiers)
 
     # Setting up mouse follow
+
+    # Getting inputs from mouse
+    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
+        self.player.on_mouse_motion(x, y)
+
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
         if button == arcade.MOUSE_BUTTON_LEFT:
             self.c_x = x
@@ -163,11 +154,7 @@ class MyGameWindow(arcade.Window):
             # self.rectangle_y = y
             pass
 
-    # Getting inputs from mouse
-    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
-        self.player.on_mouse_motion(x, y)
-
 
 # Creating my window
-MyGameWindow(1280, 720, "Mistery Library")
+MyGameWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Mistery Library")
 arcade.run()
