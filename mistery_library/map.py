@@ -1,11 +1,13 @@
 import arcade
-import os
 
 # importing classes
 from clue import Clue
 
+# getting config
+from config import Config
 
-PATH = os.path.dirname(os.path.abspath(__file__)) + "/"
+# singleton
+config = Config()
 
 
 class Map:
@@ -29,7 +31,7 @@ class Map:
 
     # setup tiled_map function
     def setup(self):
-        tiledmap_filepath = PATH + "maps/my-map.tmx"
+        tiledmap_filepath = config.path + "maps/my-map.tmx"
 
         layer_options = {
             "Terrain": {

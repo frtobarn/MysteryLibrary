@@ -41,6 +41,19 @@ class Light(GameObject):
             self.pos_x += light_x_dist * 0.1
             self.pos_y += light_y_dist * 0.1
 
+    # Inputs for light object
+    def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
+        if button == arcade.MOUSE_BUTTON_LEFT:
+            self.pos_x = x
+            self.pos_y = y
+            # self.x_speed *= -1
+            # self.y_speed *= -1
+
+        if button == arcade.MOUSE_BUTTON_RIGHT:
+            # self.rectangle_x = x
+            # self.rectangle_y = y
+            pass
+
     def turn_on():
         pass
 

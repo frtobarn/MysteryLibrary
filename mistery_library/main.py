@@ -5,7 +5,7 @@ Mistery library
 """
 authors:
 code: Fabian Ricardo Tobar Numesqui(frtobarn@unal.edu.co)
-art: Maria Camila Diaz Guevara
+concept-art: Maria Camila Diaz Guevara
 """
 
 # Importing arcade library
@@ -16,72 +16,66 @@ import os
 
 
 # Importing classes
+from config import Config
 from player import Player
 from ghost import Ghost
 from map import Map
-from light import Light
 
-# from math import sqrt # may be i need it later ;)
+# Executing custom configurations
+# singleton
+config = Config()
 
-# Getting absolute path because im into a linux virtual environment
-PATH = os.path.dirname(os.path.abspath(__file__)) + "/"
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
+
+# Physics
+MOVEMENT_SPEED = 8
+JUMP_SPEED = 28
+GRAVITY = 0
 
 
 # Main class
-class MyGameWindow(arcade.Window):
+class MisteryLibraryGame(arcade.Window):
     def __init__(
         self,
-        width: int = SCREEN_WIDTH,
-        height: int = SCREEN_HEIGHT,
+        width: int = config.screen_width,
+        height: int = config.screen_height,
         title: str | None = "Mistery Library",
         fullscreen: bool = True,
         update_rate: float | None = 1 / 30,
     ):
         super().__init__(width, height, title, fullscreen, update_rate)
-        """
-        === Other options ===
-        resizable: bool = True,
-        update_rate: float | None = 1 / 60,
-        antialiasing: bool = True,
-        gl_version: Tuple[int, int] = ...,
-        screen: XlibScreen = None,
-        style: str | None = pyglet.window.Window.WINDOW_STYLE_DEFAULT,
-        visible: bool = True,
-        vsync: bool = False,
-        gc_mode: str = "context_gc",
-        center_window: bool = False,
-        samples: int = 4,
-        enable_polling: bool = True,"""
 
         # Setting up window location
         self.set_location(0, 0)
         arcade.set_background_color(arcade.color.BLUE_GRAY)
 
-        # print(arcade.get_projection())
-
         # creating a level or map
         self.map_1 = Map("map_01")
 
         # Creating a player and some ghosts
-        self.player = Player("Player", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 100, "")
-        self.ghost_1 = Ghost("ghost_1", 100, 100, 1, "", "", "")
+        self.player = Player(
+            "Player", config.screen_width // 2, config.screen_height // 2, 100
+        )
+        self.ghost_1 = Ghost("ghost_1", 100, 150, 0.001, "", "")
 
-        # Position var for circle
-        self.c_x = 150
-        self.c_y = 50
-        self.c_ang = 0
+        # Physics
+        self.physics_engine = None
 
-        # Speed vars for circle
-        self.c_x_speed = 300
-        self.c_y_speed = 100
-        self.c_ang_speed = 0
+        # introducing score
+        self.score = 0
 
-    # called once a frame to render the window
+        # Running setup fuction
+        self.setup()
+
+    def setup(self):
+        self.physics_engine = arcade.PhysicsEnginePlatformer(
+            self.player.character_sprite,
+            self.map_1.scene.get_sprite_list("Terrain"),
+            gravity_constant=GRAVITY,
+        )
+
+    # Called once a frame to render the window
     def on_draw(self):
         """Render the screen."""
-
         # Clear the screen to load the background color
         self.clear()
 
@@ -95,37 +89,17 @@ class MyGameWindow(arcade.Window):
         self.player.draw()
         self.ghost_1.draw()
 
-        # Drawing examples
-
-        arcade.draw_circle_filled(
-            self.c_x, self.c_y, 25, arcade.color.AMARANTH, self.c_ang, 10
-        )
+        # Drawing optinos on screen
+        self.draw_info()
 
     # On_update function(called every frame)
     def on_update(self, delta_time: float):
-        # Moving the filled circle
-        self.c_x += self.c_x_speed * delta_time
-        self.c_y += self.c_y_speed * delta_time
-        self.c_ang += self.c_ang_speed * delta_time
-
-        # Detecting outbounds
-        if self.c_x + 30 > 1280 or self.c_x - 30 < 0:
-            self.c_x_speed *= -1
-            self.c_ang_speed *= -1
-        if self.c_y + 30 > 720 or self.c_y - 30 < 0:
-            self.c_y_speed *= -1
-            self.c_ang_speed *= -1
-
-        # Executing movement-inputs for player
-        self.player.move()
-
-        self.ghost_1.update()
-
-        # self.player_sprite.set_position(self.player_x, self.player_y)
-        # self.player_sprite.update()
-
-        # update plater's animated sprite list
+        # Updating physics engine
+        self.physics_engine.update()
+        # updating player's animated sprite list
         self.player.update()
+        # Executing ghost's logic
+        self.ghost_1.update(delta_time)
 
     # Setting up input keys
     def on_key_press(self, symbol: int, modifiers: int):
@@ -142,19 +116,37 @@ class MyGameWindow(arcade.Window):
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
         self.player.on_mouse_motion(x, y)
 
+    # Inputs for light mouse's buttons
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
-        if button == arcade.MOUSE_BUTTON_LEFT:
-            self.c_x = x
-            self.c_y = y
-            self.c_x_speed *= -1
-            self.c_y_speed *= -1
+        self.player.light.on_mouse_press(x, y, button, modifiers)
 
-        if button == arcade.MOUSE_BUTTON_RIGHT:
-            # self.rectangle_x = x
-            # self.rectangle_y = y
-            pass
+    # drawing interface
+    def draw_info(self):
+        # Drawing a frame
+        arcade.draw_lines(
+            [
+                (0, 0),
+                (config.screen_width, 0),
+                (config.screen_width, 0),
+                (config.screen_width, config.screen_height),
+                (config.screen_width, config.screen_height),
+                (0, config.screen_height),
+                (0, config.screen_height),
+                (0, 0),
+            ],
+            arcade.color.ALABAMA_CRIMSON,
+            10,
+        )
+        # Drawing score text
+        arcade.draw_text(
+            f"Score: {self.score}",
+            arcade.get_viewport()[0] + 10,
+            arcade.get_viewport()[2] + config.screen_height - 30,
+            arcade.color.GOLD,
+            font_size=20,
+        )
 
 
 # Creating my window
-MyGameWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Mistery Library")
+MisteryLibraryGame(config.screen_width, config.screen_height, "Mistery Library")
 arcade.run()
