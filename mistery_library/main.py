@@ -56,6 +56,10 @@ class MisteryLibraryGame(arcade.Window):
             "Player", config.screen_width // 2, config.screen_height // 2, 100
         )
         self.ghost_1 = Ghost("ghost_1", 100, 150, 0.001, "", "")
+        self.ghost_2 = Ghost("ghost_2", 200, 250, 0.001, "", "")
+        self.ghost_3 = Ghost("ghost_3", 300, 350, 0.001, "", "")
+        self.ghost_4 = Ghost("ghost_4", 400, 450, 0.001, "", "")
+        self.ghost_5 = Ghost("ghost_5", 500, 550, 0.001, "", "")
 
         # Physics
         self.physics_engine = None
@@ -88,6 +92,10 @@ class MisteryLibraryGame(arcade.Window):
         # Drawing player's  and ghost's animated sprite
         self.player.draw()
         self.ghost_1.draw()
+        self.ghost_2.draw()
+        self.ghost_3.draw()
+        self.ghost_4.draw()
+        self.ghost_5.draw()
 
         # Drawing optinos on screen
         self.draw_info()
@@ -100,6 +108,10 @@ class MisteryLibraryGame(arcade.Window):
         self.player.update()
         # Executing ghost's logic
         self.ghost_1.update(delta_time)
+        self.ghost_2.update(delta_time)
+        self.ghost_3.update(delta_time)
+        self.ghost_4.update(delta_time)
+        self.ghost_5.update(delta_time)
 
     # Setting up input keys
     def on_key_press(self, symbol: int, modifiers: int):

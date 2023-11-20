@@ -8,6 +8,7 @@ from config import Config
 # singleton
 config = Config()
 
+# Sprite size in px
 SPRITE_WIDTH = 160
 SPRITE_HEIGHT = 292
 

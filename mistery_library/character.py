@@ -1,3 +1,8 @@
+# Sprite size in px
+SPRITE_WIDTH = 0
+SPRITE_HEIGHT = 0
+
+
 class Character:
     def __init__(self, name, pos_x, pos_y, speed):
         self.name = name

@@ -6,9 +6,9 @@ from config import Config
 # singleton
 config = Config()
 
-#
-SPRITE_WIDTH = 160
-SPRITE_HEIGHT = 292
+# Sprite size in px
+SPRITE_WIDTH = 80
+SPRITE_HEIGHT = 100
 
 
 class Ghost(Character):
@@ -42,92 +42,32 @@ class Ghost(Character):
         self.character_sprite = arcade.AnimatedTimeBasedSprite()
 
         # Getting abslute path for my resources
-        sprite_filepath = config.path + "sprites/walk-basic.png"
+        sprite_filepath = config.path + "sprites/ghosts/" + self.name + ".png"
 
-        """for i in range(9):
-            texture = arcade.load_texture(
-                sprite_filepath, x=i * 100, y=0, width=100, height=442
-            )
-            anim = arcade.AnimationKeyframe(i, 30, texture)
-            self.player.frames.append(anim)"""
+        duration = 120
+        frames = 5
 
-        duration = 90
-
-        texture = arcade.load_texture(
-            sprite_filepath, x=0, y=0, width=SPRITE_WIDTH, height=SPRITE_HEIGHT
-        )
-        anim = arcade.AnimationKeyframe(1, duration, texture)
-        self.character_sprite.frames.append(anim)
-
-        texture = arcade.load_texture(
-            sprite_filepath,
-            x=160,
-            y=0,
-            width=SPRITE_WIDTH,
-            height=SPRITE_HEIGHT,
-        )
-        anim = arcade.AnimationKeyframe(2, duration, texture)
-        self.character_sprite.frames.append(anim)
-
-        texture = arcade.load_texture(
-            sprite_filepath,
-            x=320,
-            y=0,
-            width=SPRITE_WIDTH,
-            height=SPRITE_HEIGHT,
-        )
-        anim = arcade.AnimationKeyframe(3, duration, texture)
-        self.character_sprite.frames.append(anim)
-
-        texture = arcade.load_texture(
-            sprite_filepath,
-            x=480,
-            y=0,
-            width=SPRITE_WIDTH,
-            height=SPRITE_HEIGHT,
-        )
-        anim = arcade.AnimationKeyframe(4, duration, texture)
-        self.character_sprite.frames.append(anim)
-
-        texture = arcade.load_texture(
-            sprite_filepath,
-            x=0,
-            y=292,
-            width=SPRITE_WIDTH,
-            height=SPRITE_HEIGHT,
-        )
-        anim = arcade.AnimationKeyframe(5, duration, texture)
-        self.character_sprite.frames.append(anim)
-
-        texture = arcade.load_texture(
-            sprite_filepath,
-            x=160,
-            y=292,
-            width=SPRITE_WIDTH,
-            height=SPRITE_HEIGHT,
-        )
-        anim = arcade.AnimationKeyframe(6, duration, texture)
-        self.character_sprite.frames.append(anim)
-
-        texture = arcade.load_texture(
-            sprite_filepath,
-            x=320,
-            y=292,
-            width=SPRITE_WIDTH,
-            height=SPRITE_HEIGHT,
-        )
-        anim = arcade.AnimationKeyframe(7, duration, texture)
-        self.character_sprite.frames.append(anim)
-
-        texture = arcade.load_texture(
-            sprite_filepath,
-            x=480,
-            y=292,
-            width=SPRITE_WIDTH,
-            height=SPRITE_HEIGHT,
-        )
-        anim = arcade.AnimationKeyframe(8, duration, texture)
-        self.character_sprite.frames.append(anim)
+        for i in range(frames):
+            if i > 2:
+                texture = arcade.load_texture(
+                    sprite_filepath,
+                    x=SPRITE_WIDTH * (frames - i),
+                    y=0,
+                    width=SPRITE_WIDTH,
+                    height=SPRITE_HEIGHT,
+                )
+                anim = arcade.AnimationKeyframe(i + 1, duration, texture)
+                self.character_sprite.frames.append(anim)
+            else:
+                texture = arcade.load_texture(
+                    sprite_filepath,
+                    x=SPRITE_WIDTH * i,
+                    y=0,
+                    width=SPRITE_WIDTH,
+                    height=SPRITE_HEIGHT,
+                )
+                anim = arcade.AnimationKeyframe(i + 1, duration, texture)
+                self.character_sprite.frames.append(anim)
 
         self.character_sprite.center_x = self.pos_x
         self.character_sprite.center_y = self.pos_y
