@@ -20,3 +20,5 @@ class Config(object):
         self.path = PATH
         self.screen_width = SCREEN_WIDTH
         self.screen_height = SCREEN_HEIGHT
+        self.screen_half_width = SCREEN_WIDTH // 2
+        self.screen_half_height = SCREEN_HEIGHT // 2

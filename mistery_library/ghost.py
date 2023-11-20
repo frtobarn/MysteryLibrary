@@ -48,7 +48,7 @@ class Ghost(Character):
         frames = 5
 
         for i in range(frames):
-            if i > 2:
+            if i > frames // 2:
                 texture = arcade.load_texture(
                     sprite_filepath,
                     x=SPRITE_WIDTH * (frames - i),

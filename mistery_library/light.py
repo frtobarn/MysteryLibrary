@@ -1,5 +1,8 @@
 import arcade
 from game_object import GameObject
+from config import Config
+
+config = Config()
 
 
 class Light(GameObject):
@@ -14,15 +17,29 @@ class Light(GameObject):
         self.x_speed = 0
         self.y_speed = 0
 
+        #
+        self.object_sprite = arcade.Sprite(config.path + "sprites/utils/lightRange.png")
+        self.setup()
+
+    def setup(self):
+        self.object_sprite.center_x = self.pos_x
+        self.object_sprite.center_y = self.pos_y
+        self.object_sprite.scale = 2
+        self.object_sprite.alpha = 200
+
     # Drawing light
     def draw(self):
         arcade.draw_circle_outline(
             self.pos_x, self.pos_y, 30, arcade.color.APRICOT, 3, 0, 10
         )
+        self.object_sprite.draw()
 
     # Updating light
     def update(self):
         self.move()
+        self.object_sprite.center_x = self.pos_x
+        self.object_sprite.center_y = self.pos_y
+        # self.object_sprite.update()
 
     # Getting input from mouse
     def on_mouse_motion(self, x, y):
