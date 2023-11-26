@@ -1,7 +1,7 @@
 import arcade
 
 # importing classes
-from clue import Clue
+# from clue import Clue
 
 # getting config
 from config import Config
@@ -31,13 +31,13 @@ class Map:
         self.tile_height = TILE_HEIGHT
 
         # Creating clues
-        self.clue_1 = Clue("clue_1", 900, 600, "")
-        self.clue_2 = Clue("clue_2", 300, 300, "")
+        # self.clue_1 = Clue("clue_1", 900, 600, "")
+        # self.clue_2 = Clue("clue_2", 300, 300, "")
 
         # Using a spritelist to store clues
-        self.clue_list = arcade.SpriteList()
-        self.clue_list.append(self.clue_1.clue_sprite)
-        self.clue_list.append(self.clue_2.clue_sprite)
+        # self.clue_list = arcade.SpriteList()
+        # self.clue_list.append(self.clue_1.clue_sprite)
+        # self.clue_list.append(self.clue_2.clue_sprite)
 
         # setup tiled_map function
         self.setup()
@@ -66,8 +66,9 @@ class Map:
         self.scene.draw()
 
         # Drawing clues spritelist
-        self.clue_list.draw()
+        # self.clue_list.draw()
 
     def update(self):
         # Updating clues spritelist
-        self.clue_list.update()
+        # self.clue_list.update()
+        pass

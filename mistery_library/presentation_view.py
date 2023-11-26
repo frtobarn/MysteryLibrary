@@ -1,28 +1,22 @@
 import arcade
-from game_view import GameView
+from menu_view import MenuView
 from config import Config
 from fading_view import FadingView
 
 config = Config()
 
 
-class MenuView(FadingView):
-    def __init__(self):
-        super().__init__()
-
-    def setup(self):
-        pass
-
+class PresentationView(FadingView):
     def on_show_view(self):
         arcade.set_background_color(arcade.color.BLACK)
 
     def on_update(self, dt):
-        self.update_fade(next_view=GameView)
+        self.update_fade(next_view=MenuView)
 
     def on_draw(self):
         self.clear()
         arcade.draw_text(
-            "Menu - space to advance",
+            "Mistery library - space to advance",
             config.screen_half_width,
             config.screen_half_height,
             arcade.color.WHITE,

@@ -35,7 +35,7 @@ class GameOverView(FadingView):
             54,
         )
         arcade.draw_text(
-            "Scape to exit",
+            "Press any to exit",
             arcade.get_viewport()[0] + 310,
             arcade.get_viewport()[2] + 300,
             arcade.color.WHITE,
@@ -64,6 +64,5 @@ class GameOverView(FadingView):
         self.draw_fading()
 
     def on_key_press(self, key, _modifiers):
-        if key == arcade.key.ESCAPE:
-            self.fade_out = 0
-            arcade.Window.close(self.window)
+        self.fade_out = 0
+        arcade.Window.close(self.window)

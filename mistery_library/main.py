@@ -13,7 +13,7 @@ import arcade
 
 # Importing classes
 from config import Config
-from menu_view import MenuView
+from presentation_view import PresentationView
 
 # Executing custom configurations
 config = Config()  # singleton
@@ -45,6 +45,6 @@ if __name__ == "__main__":
         config.screen_width, config.screen_height, "Mistery Library"
     )
     window.total_score = 100
-    menu_view = MenuView()
-    window.show_view(menu_view)
+    presentation_view = PresentationView()
+    window.show_view(presentation_view)
     arcade.run()
