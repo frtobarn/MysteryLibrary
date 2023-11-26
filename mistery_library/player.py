@@ -9,8 +9,8 @@ from config import Config
 config = Config()
 
 # Sprite size in px
-SPRITE_WIDTH = 160
-SPRITE_HEIGHT = 292
+SPRITE_WIDTH = config.player_sprite_width
+SPRITE_HEIGHT = config.player_sprite_height
 
 
 class Player(Character):
@@ -45,91 +45,12 @@ class Player(Character):
         self.character_sprite_list = arcade.SpriteList()
         self.character_sprite = arcade.AnimatedWalkingSprite()
 
-        self.character_sprite.stand_right_textures = []
-        self.character_sprite.stand_right_textures.append(
-            arcade.load_texture(config.path + "sprites/basicWalk/tile000.png")
-        )
-
-        self.character_sprite.stand_left_textures = []
-        self.character_sprite.stand_left_textures.append(
-            arcade.load_texture(
-                config.path + "sprites/basicWalk/tile000.png", mirrored=True
-            )
-        )
-
-        # walk to right sprites
-        self.character_sprite.walk_right_textures = []
-        self.character_sprite.walk_right_textures.append(
-            arcade.load_texture(config.path + "sprites/basicWalk/tile000.png")
-        )
-        self.character_sprite.walk_right_textures.append(
-            arcade.load_texture(config.path + "sprites/basicWalk/tile001.png")
-        )
-        self.character_sprite.walk_right_textures.append(
-            arcade.load_texture(config.path + "sprites/basicWalk/tile002.png")
-        )
-        self.character_sprite.walk_right_textures.append(
-            arcade.load_texture(config.path + "sprites/basicWalk/tile003.png")
-        )
-        self.character_sprite.walk_right_textures.append(
-            arcade.load_texture(config.path + "sprites/basicWalk/tile004.png")
-        )
-        self.character_sprite.walk_right_textures.append(
-            arcade.load_texture(config.path + "sprites/basicWalk/tile005.png")
-        )
-        self.character_sprite.walk_right_textures.append(
-            arcade.load_texture(config.path + "sprites/basicWalk/tile006.png")
-        )
-        self.character_sprite.walk_right_textures.append(
-            arcade.load_texture(config.path + "sprites/basicWalk/tile007.png")
-        )
-
-        # walk to left sprites
-        self.character_sprite.walk_left_textures = []
-        self.character_sprite.walk_left_textures.append(
-            arcade.load_texture(
-                config.path + "sprites/basicWalk/tile000.png", mirrored=True
-            )
-        )
-        self.character_sprite.walk_left_textures.append(
-            arcade.load_texture(
-                config.path + "sprites/basicWalk/tile001.png", mirrored=True
-            )
-        )
-        self.character_sprite.walk_left_textures.append(
-            arcade.load_texture(
-                config.path + "sprites/basicWalk/tile002.png", mirrored=True
-            )
-        )
-        self.character_sprite.walk_left_textures.append(
-            arcade.load_texture(
-                config.path + "sprites/basicWalk/tile003.png", mirrored=True
-            )
-        )
-        self.character_sprite.walk_left_textures.append(
-            arcade.load_texture(
-                config.path + "sprites/basicWalk/tile004.png", mirrored=True
-            )
-        )
-        self.character_sprite.walk_left_textures.append(
-            arcade.load_texture(
-                config.path + "sprites/basicWalk/tile005.png", mirrored=True
-            )
-        )
-        self.character_sprite.walk_left_textures.append(
-            arcade.load_texture(
-                config.path + "sprites/basicWalk/tile006.png", mirrored=True
-            )
-        )
-        self.character_sprite.walk_left_textures.append(
-            arcade.load_texture(
-                config.path + "sprites/basicWalk/tile007.png", mirrored=True
-            )
-        )
+        # load textures
+        self.load_textures()
 
         self.character_sprite.scale = 0.5
-        self.character_sprite.center_x = 1280 // 2
-        self.character_sprite.center_y = 720 // 2
+        self.character_sprite.center_x = config.screen_half_width
+        self.character_sprite.center_y = config.screen_half_height
 
         self.character_sprite.set_hit_box(
             [
@@ -182,13 +103,6 @@ class Player(Character):
         if symbol == arcade.key.W or symbol == arcade.key.S:
             self.character_sprite.change_y = 0
 
-    def detect_outbounds(self):
-        pos = self.character_sprite_list.center
-        self.pos_x = pos[0]
-        self.pos_y = pos[1]
-        if self.pos_x > config.screen_width:
-            self.character_sprite.set_position(self.pos_x - 1, self.pos_y)
-
     # Getting inputs from mouse
     def on_mouse_motion(self, x, y):
         self.light.on_mouse_motion(x, y)
@@ -201,3 +115,93 @@ class Player(Character):
 
     def die(self):
         pass
+
+    def detect_outbounds(self):
+        pos = self.character_sprite_list.center
+        self.pos_x = pos[0]
+        self.pos_y = pos[1]
+        if self.pos_x > config.screen_width:
+            self.character_sprite.set_position(self.pos_x - 1, self.pos_y)
+
+    def load_textures(self):
+        self.character_sprite.stand_right_textures = []
+        self.character_sprite.stand_right_textures.append(
+            arcade.load_texture(config.path + "sprites/player/tile000.png")
+        )
+
+        self.character_sprite.stand_left_textures = []
+        self.character_sprite.stand_left_textures.append(
+            arcade.load_texture(
+                config.path + "sprites/player/tile000.png", mirrored=True
+            )
+        )
+
+        # walk to right sprites
+        self.character_sprite.walk_right_textures = []
+        self.character_sprite.walk_right_textures.append(
+            arcade.load_texture(config.path + "sprites/player/tile000.png")
+        )
+        self.character_sprite.walk_right_textures.append(
+            arcade.load_texture(config.path + "sprites/player/tile001.png")
+        )
+        self.character_sprite.walk_right_textures.append(
+            arcade.load_texture(config.path + "sprites/player/tile002.png")
+        )
+        self.character_sprite.walk_right_textures.append(
+            arcade.load_texture(config.path + "sprites/player/tile003.png")
+        )
+        self.character_sprite.walk_right_textures.append(
+            arcade.load_texture(config.path + "sprites/player/tile004.png")
+        )
+        self.character_sprite.walk_right_textures.append(
+            arcade.load_texture(config.path + "sprites/player/tile005.png")
+        )
+        self.character_sprite.walk_right_textures.append(
+            arcade.load_texture(config.path + "sprites/player/tile006.png")
+        )
+        self.character_sprite.walk_right_textures.append(
+            arcade.load_texture(config.path + "sprites/player/tile007.png")
+        )
+
+        # walk to left sprites
+        self.character_sprite.walk_left_textures = []
+        self.character_sprite.walk_left_textures.append(
+            arcade.load_texture(
+                config.path + "sprites/player/tile000.png", mirrored=True
+            )
+        )
+        self.character_sprite.walk_left_textures.append(
+            arcade.load_texture(
+                config.path + "sprites/player/tile001.png", mirrored=True
+            )
+        )
+        self.character_sprite.walk_left_textures.append(
+            arcade.load_texture(
+                config.path + "sprites/player/tile002.png", mirrored=True
+            )
+        )
+        self.character_sprite.walk_left_textures.append(
+            arcade.load_texture(
+                config.path + "sprites/player/tile003.png", mirrored=True
+            )
+        )
+        self.character_sprite.walk_left_textures.append(
+            arcade.load_texture(
+                config.path + "sprites/player/tile004.png", mirrored=True
+            )
+        )
+        self.character_sprite.walk_left_textures.append(
+            arcade.load_texture(
+                config.path + "sprites/player/tile005.png", mirrored=True
+            )
+        )
+        self.character_sprite.walk_left_textures.append(
+            arcade.load_texture(
+                config.path + "sprites/player/tile006.png", mirrored=True
+            )
+        )
+        self.character_sprite.walk_left_textures.append(
+            arcade.load_texture(
+                config.path + "sprites/player/tile007.png", mirrored=True
+            )
+        )

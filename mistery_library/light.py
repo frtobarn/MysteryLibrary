@@ -25,7 +25,7 @@ class Light(GameObject):
         self.object_sprite.center_x = self.pos_x
         self.object_sprite.center_y = self.pos_y
         self.object_sprite.scale = 2
-        self.object_sprite.alpha = 200
+        self.object_sprite.alpha = 255
 
     # Drawing light
     def draw(self):

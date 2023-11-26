@@ -41,6 +41,24 @@ class Ghost(Character):
         self.character_sprite_list = arcade.SpriteList()
         self.character_sprite = arcade.AnimatedTimeBasedSprite()
 
+        # loading textures
+        self.load_textures()
+
+        self.character_sprite.center_x = self.pos_x
+        self.character_sprite.center_y = self.pos_y
+
+        self.character_sprite_list.append(self.character_sprite)
+
+    def draw(self):
+        self.character_sprite_list.draw()
+
+    def update(self, delta_time):
+        # Moving chracter
+        self.move(delta_time)
+        # Updating animation sprites
+        self.character_sprite_list.update_animation()
+
+    def load_textures(self):
         # Getting abslute path for my resources
         sprite_filepath = config.path + "sprites/ghosts/" + self.name + ".png"
 
@@ -68,20 +86,6 @@ class Ghost(Character):
                 )
                 anim = arcade.AnimationKeyframe(i + 1, duration, texture)
                 self.character_sprite.frames.append(anim)
-
-        self.character_sprite.center_x = self.pos_x
-        self.character_sprite.center_y = self.pos_y
-
-        self.character_sprite_list.append(self.character_sprite)
-
-    def draw(self):
-        self.character_sprite_list.draw()
-
-    def update(self, delta_time):
-        # Moving chracter
-        self.move(delta_time)
-        # Updating animation sprites
-        self.character_sprite_list.update_animation()
 
     def move(self, delta_time):
         # Trying to move

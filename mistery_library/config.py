@@ -5,6 +5,10 @@ PATH = os.path.dirname(os.path.abspath(__file__)) + "/"
 SCREEN_WIDTH = 1080
 SCREEN_HEIGHT = 660
 
+# player sprites size
+PLAYER_SPRITE_HEIGHT = 292
+PLAYER_SPRITE_WIDTH = 160
+
 
 class Config(object):
     __instance = None
@@ -22,3 +26,5 @@ class Config(object):
         self.screen_height = SCREEN_HEIGHT
         self.screen_half_width = SCREEN_WIDTH // 2
         self.screen_half_height = SCREEN_HEIGHT // 2
+        self.player_sprite_width = PLAYER_SPRITE_WIDTH
+        self.player_sprite_height = PLAYER_SPRITE_HEIGHT
